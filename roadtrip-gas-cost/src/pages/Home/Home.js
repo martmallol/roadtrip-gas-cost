@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
-import { Control, useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
+// Handling errors: https://www.npmjs.com/package/@hookform/error-message
+import { ErrorMessage } from '@hookform/error-message'; 
 
 function Home({ setResponse }) {
   // Variables
@@ -67,9 +69,6 @@ function Home({ setResponse }) {
     navigation('/last-trip')
   };
 
-  // {/Expandable form: quirksmode.org_dom_domform.html/}
-
-
   // View
   return (
     <div className='container'>
@@ -88,16 +87,21 @@ function Home({ setResponse }) {
                 <div className="form-row ml-2 mr-2">
                   <div className="col-7">
                     <input type="text" 
+                          name="firstAddress"
                           className="form-control" 
                           placeholder="1st Address"
                           {...register(`trips.${index}.firstAddress`, {
                             required: true
                           })}></input>
-                    
+                    <ErrorMessage errors={errors} 
+                                  name={`trips.${index}.firstAddress`} 
+                                  message="Address is required" 
+                                  render={({ message }) => <p>{message}</p>}/>
 
                   </div>
                   <div className="col">
-                    <select id="inputState" 
+                    <select id="inputState"
+                            name='firstState' 
                             className="form-control"
                             {...register(`trips.${index}.firstState`, {
                               validate: stateValidator
@@ -105,22 +109,30 @@ function Home({ setResponse }) {
                       <option selected>State</option>
                       <option>...</option>
                     </select>
-                    
+                    <ErrorMessage errors={errors} 
+                                  name={`trips.${index}.firstState`} 
+                                  message="State is required" 
+                                  render={({ message }) => <p>{message}</p>}/>
                   </div>
                 </div>
 
                 <div className="form-row m-2">
                   <div className="col-7">
-                    <input type="text" 
+                    <input type="text"
+                          name='secondAddress' 
                           className="form-control" 
                           placeholder="2nd Address"
                           {...register(`trips.${index}.secondAddress`, {
                             required: true
                           })}></input>
-                  
+                    <ErrorMessage errors={errors} 
+                                  name={`trips.${index}.secondAddress`} 
+                                  message="Address is required" 
+                                  render={({ message }) => <p>{message}</p>}/>
                   </div>
                   <div className="col">
-                    <select id="inputState" 
+                    <select id="inputState"
+                            name='secondState' 
                             className="form-control"
                             {...register(`trips.${index}.secondState`, {
                               validate: stateValidator
@@ -128,7 +140,10 @@ function Home({ setResponse }) {
                       <option selected>State</option>
                       <option>...</option>
                     </select>
-                  
+                    <ErrorMessage errors={errors} 
+                                  name={`trips.${index}.secondState`} 
+                                  message="State is required" 
+                                  render={({ message }) => <p>{message}</p>}/>
                   </div>
                 </div>
 
