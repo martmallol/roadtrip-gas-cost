@@ -1,9 +1,12 @@
 import React from 'react'
 import './LastTrip.css'
 
-function LastTrip() {
+function LastTrip({ response }) {
   return (
-    <h1>I'm last trip</h1>
+    <div>
+      <h1>I'm last trip</h1>
+      {console.log(response)}
+    </div>
   )
 }
 

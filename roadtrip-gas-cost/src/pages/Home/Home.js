@@ -1,14 +1,20 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
-import { useForm } from 'react-hook-form';
+import { Control, useFieldArray, useForm, useWatch } from 'react-hook-form';
 
 function Home({ setResponse }) {
   // Variables
-  const [actualTrip, setActualTrip] = useState(1);
+  // const [actualTrip, setActualTrip] = useState(1);
   /* ...register('name') includes the key 'name' and the value inserted on that input 
   to the object 'data' created after submitting a form */
-  const { register, formState: { errors }, handleSubmit } = useForm();
+  const { register, formState: { errors }, handleSubmit, control } = useForm({
+    defaultValues:  {
+      trips: [{}],
+      fuelConsumption: ''
+    }
+  });
+  const { fields, append, remove } = useFieldArray({ control, name: "trips" })
   const navigation = useNavigate(); // Navigate to other page of my project
 
   // Functions
@@ -39,9 +45,24 @@ function Home({ setResponse }) {
     return (fuel ? fuel > 0 && fuel < 50 : true );
   }
 
+  // Render Remove button if it's not the first trip
+  const renderRemoveButton = (idx) => {
+    if(idx > 0) {
+      return (
+      <div className='col-1'>
+        <button type="button" 
+                      className="btn btn-primary btn-danger" 
+                      onClick={() => remove(idx)}>Remove trip</button>
+      </div>
+      );
+    }
+    return;
+  };
+
   // Specifies what happens after clicking the 'send' button
   const formSubmit = (data) => {
     console.log(data);
+    console.log(errors);
     setResponse(data);
     navigation('/last-trip')
   };
@@ -60,71 +81,83 @@ function Home({ setResponse }) {
         <form onSubmit={handleSubmit(formSubmit)}>
           <h2>Fuel Cost Calculator</h2>
           
-          <label>{numberSyntax(actualTrip)} trip</label>
-          <div class="form-row m-2">
-            <div class="col-7">
-              <input type="text" 
-                     class="form-control" 
-                     placeholder="1st Address"
-                     {...register("1st Address", {
-                       required: true
-                     })}></input>
-              {errors['1st Address']?.type === 'required' && <p>1st Address is required</p>}
-            </div>
-            <div class="col">
-              <select id="inputState" 
-                      class="form-control"
-                      {...register('1st State', {
-                        validate: stateValidator
-                      })}>
-                <option selected>State</option>
-                <option>...</option>
-              </select>
-              {errors['1st State'] && <p>State is required</p>}
-            </div>
-          </div>
-          <div class="form-row m-2">
-            <div class="col-7">
-              <input type="text" 
-                     class="form-control" 
-                     placeholder="2nd Address"
-                     {...register('2nd Address', {
-                       required: true
-                     })}></input>
-              {errors['2nd Address']?.type === 'required' && <p>2nd Address is required</p>}
-            </div>
-            <div class="col">
-            <select id="inputState" 
-                    class="form-control"
-                    {...register('2nd State', {
-                      validate: stateValidator
-                    })}>
-              <option selected>State</option>
-              <option>...</option>
-            </select>
-            {errors['2nd State'] && <p>State is required</p>}
-            </div>
-          </div>
+          {fields.map(({id}, index) => {
+            return( // ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+              <div key={id}>
+                <label>{numberSyntax(index+1)} trip</label>                
+                <div className="form-row ml-2 mr-2">
+                  <div className="col-7">
+                    <input type="text" 
+                          className="form-control" 
+                          placeholder="1st Address"
+                          {...register(`trips.${index}.firstAddress`, {
+                            required: true
+                          })}></input>
+                    
+
+                  </div>
+                  <div className="col">
+                    <select id="inputState" 
+                            className="form-control"
+                            {...register(`trips.${index}.firstState`, {
+                              validate: stateValidator
+                            })}>
+                      <option selected>State</option>
+                      <option>...</option>
+                    </select>
+                    
+                  </div>
+                </div>
+
+                <div className="form-row m-2">
+                  <div className="col-7">
+                    <input type="text" 
+                          className="form-control" 
+                          placeholder="2nd Address"
+                          {...register(`trips.${index}.secondAddress`, {
+                            required: true
+                          })}></input>
+                  
+                  </div>
+                  <div className="col">
+                    <select id="inputState" 
+                            className="form-control"
+                            {...register(`trips.${index}.secondState`, {
+                              validate: stateValidator
+                            })}>
+                      <option selected>State</option>
+                      <option>...</option>
+                    </select>
+                  
+                  </div>
+                </div>
+
+                {renderRemoveButton(index)}
+              </div>
+          );
+          })}
           
-          <div class="form-row m-2">
-            <div class="col">
+          <div className="form-row m-2 mt-3">
+            <div className="col">
             <input type="number" 
-                   class="form-control" 
+                   className="form-control" 
                    placeholder='Fuel consumption L/100KM (optional)'
-                   {...register('Fuel consumption L/100KM', {
+                   {...register('fuelConsumption', {
                     validate: fuelValidator
                    })}
                    />
-            {errors['Fuel consumption L/100KM'] && <p>Come on, give me a real value (Hint: It's not even close to 50)</p>}
+            {errors['fuelConsumption'] && <p>Come on, give me a real value (Hint: It's not even close to 50)</p>}
             </div>
           </div>
 
-          <div class="form-row m-2">
-            <div class="col-0">
-              <button type="submit" class="btn btn-primary" title='Add an address!'>+</button>
+          <div className="form-row m-2">
+            <div className="col-0">
+              <button type="button" 
+                      className="btn btn-primary" 
+                      onClick={() => append({})}>Add a trip</button>
             </div>
-            <div class="col-1">
-              <button type="submit" class="btn btn-primary" title='Add an address!'>Send</button>
+            <div className="col-1">
+              <button type="submit" className="btn btn-primary">Send</button>
             </div>
             
           </div>

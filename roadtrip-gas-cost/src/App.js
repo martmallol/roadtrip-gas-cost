@@ -13,8 +13,11 @@ import LastTrip from './pages/LastTrip/LastTrip';
 
 
 function App() {
-  const [response, setResponse] = useState({});
-  
+  const [response, setResponse] = useState({
+    trips: [{}],
+    fuelConsumption: 0 // cambiar
+  });
+
   return (
     <div className="App">
       <head>
@@ -27,7 +30,7 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
-          <Route path='/' exact element={ <Home setResponse={setResponse} /> } />
+          <Route path='/' exact element={ <Home  setResponse={setResponse} /> } />
           <Route path='/state-prices' element={ <StatePrices /> } />
           <Route path='/last-trip' element={ <LastTrip response={response}/> } />
         </Routes>
