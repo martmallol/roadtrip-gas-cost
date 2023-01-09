@@ -1,0 +1,31 @@
+.card {
+    max-width: 40rem;
+    margin: 0 auto;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    cursor: pointer;
+    border: 1px solid  lightgrey;
+    border-radius: 0.3rem;
+
+}
+
+.content {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0,1,0,1);
+}
+
+.content-show {
+    height: auto;
+    max-height: max-content;
+    transition: all 0.5s cubic-bezier(1,0,1,0);;
+}
+
+h6, span {
+    padding: 0 0.3rem;
+    padding-top: 0.3rem;
+}
