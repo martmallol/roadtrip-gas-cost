@@ -6,21 +6,6 @@ const totalSpent = () => {
   return 0;
 }
 
-/*
-const fetchTrip = async (firstAddress, firstState, secondAddress, secondState, e) => {
-    const formatedFirstAddr = fetchFormat(firstAddress);
-    const formatedFirstState = fetchFormat(firstState); 
-    const formatedSecondAddr = fetchFormat(secondAddress); 
-    const formatedSecondState = fetchFormat(secondState);
-
-    let response = await fetch(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${formatedFirstAddr},%20${formatedFirstState}&wayPoint.2=${formatedSecondAddr},%20${formatedSecondState}&key=${APIKey}`)
-    let data = await response.json();
-    console.log(data)
-    return data;
-    
-  }
-*/
-
 function LastTrip({ roadtrip, fetchedAPI }) {
   const [selected, setSelected] = useState(false);
   

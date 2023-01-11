@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ function Home({ setRoadtrip, setFetchedAPI }) {
   });
   const { fields, append, remove } = useFieldArray({ control, name: "trips" })
   const navigation = useNavigate(); // Navigate to other page of my project
+  const [error, setError] = useState([0]);
 
   // Functions
   // 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, 9th, 10th, etc.
@@ -50,30 +51,52 @@ function Home({ setRoadtrip, setFetchedAPI }) {
   }
 
   // Render Remove button if it's not the first trip
-  const renderRemoveButton = (idx) => {
-    if(idx > 0) {
+  const renderRemoveButton = (idx, length) => {
+    if(idx > 0 || length > 1) {
       return (
       <div className='col-1'>
         <button type="button" 
                       className="btn btn-primary btn-danger" 
-                      onClick={() => remove(idx)}>Remove trip</button>
+                      onClick={() => {
+                        remove(idx); 
+                        setError(e => [...error.slice(0,idx), ...error.slice(idx+1)]);
+                        console.log(error);  
+                      }}>Remove trip</button>
       </div>
+      // {() => {append({}); setError(error => [...error, 0]); console.log(error);}}
       );
     }
     return;
   };
 
+  // Render error message when an inexistent address was submitted
+  const renderAddressError = (idx) => {
+    if(error[idx]) {
+      return(
+        <div className='err'>
+          <label>This address doesn't exist! Try again with another address/state.</label>
+        </div>
+      );
+    } 
+  }
+
   const nextPageHandler = (routes) => {
     let badRequests = 0;
+    let requestsArr = new Array(routes.length);
     for(let i = 0; i < routes.length; i++) {
       if(routes[i].statusCode !== 200) {
         badRequests++;
-        break;
+        requestsArr[i] = 1;
+      } else {
+        requestsArr[i] = 0;
       }
     }
+    console.log('Here comes the error!')
+    console.log(error);
     // Should be an alert on the problematic trip
     if(badRequests > 0) {
       console.log('Provide valid addresses')
+      setError(requestsArr);
     } else {
       setFetchedAPI(routes);
       navigation('/last-trip')
@@ -180,7 +203,9 @@ function Home({ setRoadtrip, setFetchedAPI }) {
                                   render={({ message }) => <p>{message}</p>}/>
                   </div>
                 </div>
-                {renderRemoveButton(index)}
+                {renderAddressError(index)}
+                {renderRemoveButton(index, fields.length)}
+                
               </div>
           );
           })}
@@ -202,7 +227,7 @@ function Home({ setRoadtrip, setFetchedAPI }) {
             <div className="col-0">
               <button type="button" 
                       className="btn btn-primary" 
-                      onClick={() => append({})}>Add a trip</button>
+                      onClick={() => {append({}); setError(error => [...error, 0]); console.log(error);}}>Add a trip</button>
             </div>
             <div className="col-1">
               <button type="submit" className="btn btn-primary">Send</button>
