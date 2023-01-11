@@ -5,7 +5,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 // Handling errors: https://www.npmjs.com/package/@hookform/error-message
 import { ErrorMessage } from '@hookform/error-message'; 
 import statesUSA from '../../utils/states';
-import fetchTrip from '../../utils/fetchApi';
+import fetchMultipleTrips from '../../utils/fetchApi';
 
 function Home({ setRoadtrip, setFetchedAPI }) {
   // Variables
@@ -63,20 +63,36 @@ function Home({ setRoadtrip, setFetchedAPI }) {
     return;
   };
 
+  const nextPageHandler = (routes) => {
+    let badRequests = 0;
+    for(let i = 0; i < routes.length; i++) {
+      if(routes[i].statusCode !== 200) {
+        badRequests++;
+        break;
+      }
+    }
+    // Should be an alert on the problematic trip
+    if(badRequests > 0) {
+      console.log('Provide valid addresses')
+    } else {
+      setFetchedAPI(routes);
+      navigation('/last-trip')
+    }
+  }
+
   // Specifies what happens after clicking the 'send' button
   const formSubmit = async (data) => {
     // console.log(data);
     //console.log(errors);
     setRoadtrip(data);
   
-    let apiResponse = await fetchTrip(data.trips[0].firstAddress, data.trips[0].firstState, data.trips[0].secondAddress, data.trips[0].secondState)
-    console.log(apiResponse);
-    if(apiResponse == undefined) {
-      console.log('Provide valid addresses')
-    } else {
-      setFetchedAPI(apiResponse);
-      navigation('/last-trip')
-    }
+    // let apiResponse = await fetchTrip(data.trips[0].firstAddress, data.trips[0].firstState, data.trips[0].secondAddress, data.trips[0].secondState);
+    //console.log(apiResponse);
+    console.log('Here are the API responses');
+    let apiResponse = await fetchMultipleTrips(data.trips);
+    console.log(apiResponse)
+
+    nextPageHandler(apiResponse)
   };
 
   // View

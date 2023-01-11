@@ -80,6 +80,7 @@ function LastTrip({ roadtrip, fetchedAPI }) {
       <div class="card" >
         {renderCard()}
         {console.log(fetchedAPI)}
+        {console.log(roadtrip)}
       </div>
     </div>
   )
