@@ -1,4 +1,3 @@
-import logo from './img/logo.svg';
 import { React, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
@@ -13,10 +12,12 @@ import LastTrip from './pages/LastTrip/LastTrip';
 
 
 function App() {
-  const [response, setResponse] = useState({
+  const [roadtrip, setRoadtrip] = useState({
     trips: [{}],
     fuelConsumption: 0 // cambiar
   });
+
+  const [fetchedAPI, setFetchedAPI] = useState([])
 
   return (
     <div className="App">
@@ -30,9 +31,9 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
-          <Route path='/' exact element={ <Home  setResponse={setResponse} /> } />
+          <Route path='/' exact element={ <Home  setRoadtrip={setRoadtrip} setFetchedAPI={setFetchedAPI}/> } />
           <Route path='/state-prices' element={ <StatePrices /> } />
-          <Route path='/last-trip' element={ <LastTrip response={response}/> } />
+          <Route path='/last-trip' element={ <LastTrip roadtrip={roadtrip} fetchedAPI={fetchedAPI}/> } />
         </Routes>
       </Router>
     </div>

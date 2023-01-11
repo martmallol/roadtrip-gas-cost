@@ -1,11 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import { useFieldArray, useForm } from 'react-hook-form';
 // Handling errors: https://www.npmjs.com/package/@hookform/error-message
 import { ErrorMessage } from '@hookform/error-message'; 
+import statesUSA from '../../utils/states';
+import fetchTrip from '../../utils/fetchApi';
 
-function Home({ setResponse }) {
+function Home({ setRoadtrip, setFetchedAPI }) {
   // Variables
   // const [actualTrip, setActualTrip] = useState(1);
   /* ...register('name') includes the key 'name' and the value inserted on that input 
@@ -62,11 +64,19 @@ function Home({ setResponse }) {
   };
 
   // Specifies what happens after clicking the 'send' button
-  const formSubmit = (data) => {
-    console.log(data);
-    console.log(errors);
-    setResponse(data);
-    navigation('/last-trip')
+  const formSubmit = async (data) => {
+    // console.log(data);
+    //console.log(errors);
+    setRoadtrip(data);
+  
+    let apiResponse = await fetchTrip(data.trips[0].firstAddress, data.trips[0].firstState, data.trips[0].secondAddress, data.trips[0].secondState)
+    console.log(apiResponse);
+    if(apiResponse == undefined) {
+      console.log('Provide valid addresses')
+    } else {
+      setFetchedAPI(apiResponse);
+      navigation('/last-trip')
+    }
   };
 
   // View
@@ -79,9 +89,9 @@ function Home({ setResponse }) {
       <div>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h2>Fuel Cost Calculator</h2>
-          
+          {console.log(fields)}
           {fields.map(({id}, index) => {
-            return( // ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            return( // Here
               <div key={id}>
                 <label>{numberSyntax(index+1)} trip</label>                
                 <div className="form-row ml-2 mr-2">
@@ -107,7 +117,11 @@ function Home({ setResponse }) {
                               validate: stateValidator
                             })}>
                       <option selected>State</option>
-                      <option>...</option>
+                      {statesUSA.map((elem) => {
+                        return(
+                          <option>{elem.name}, {elem.abbreviation}</option>
+                        )
+                      })}
                     </select>
                     <ErrorMessage errors={errors} 
                                   name={`trips.${index}.firstState`} 
@@ -138,7 +152,11 @@ function Home({ setResponse }) {
                               validate: stateValidator
                             })}>
                       <option selected>State</option>
-                      <option>...</option>
+                      {statesUSA.map((elem) => {
+                        return(
+                          <option>{elem.name}, {elem.abbreviation}</option>
+                        )
+                      })}
                     </select>
                     <ErrorMessage errors={errors} 
                                   name={`trips.${index}.secondState`} 
@@ -146,7 +164,6 @@ function Home({ setResponse }) {
                                   render={({ message }) => <p>{message}</p>}/>
                   </div>
                 </div>
-
                 {renderRemoveButton(index)}
               </div>
           );

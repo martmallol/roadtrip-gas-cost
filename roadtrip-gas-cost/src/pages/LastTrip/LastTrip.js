@@ -6,7 +6,22 @@ const totalSpent = () => {
   return 0;
 }
 
-function LastTrip({ response, fetchedAPI }) {
+/*
+const fetchTrip = async (firstAddress, firstState, secondAddress, secondState, e) => {
+    const formatedFirstAddr = fetchFormat(firstAddress);
+    const formatedFirstState = fetchFormat(firstState); 
+    const formatedSecondAddr = fetchFormat(secondAddress); 
+    const formatedSecondState = fetchFormat(secondState);
+
+    let response = await fetch(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${formatedFirstAddr},%20${formatedFirstState}&wayPoint.2=${formatedSecondAddr},%20${formatedSecondState}&key=${APIKey}`)
+    let data = await response.json();
+    console.log(data)
+    return data;
+    
+  }
+*/
+
+function LastTrip({ roadtrip, fetchedAPI }) {
   const [selected, setSelected] = useState(false);
   
   const toggle = () => {
@@ -22,7 +37,7 @@ function LastTrip({ response, fetchedAPI }) {
 
   const renderCard = () => {
     // No roadtrip was submitted
-    if (Object.keys(response.trips[0]).length === 0) {
+    if (Object.keys(roadtrip.trips[0]).length === 0) {
       return (
         <div className="card-body">
           <h5 class="card-title">You haven't submitted a roadtrip yet.</h5>
