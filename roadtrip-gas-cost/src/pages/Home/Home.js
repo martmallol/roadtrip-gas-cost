@@ -7,6 +7,23 @@ import { ErrorMessage } from '@hookform/error-message';
 import statesUSA from '../../utils/states';
 import fetchMultipleTrips from '../../utils/fetchApi';
 
+// 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, 9th, 10th, etc.
+export const numberSyntax = (number) => {
+  let answer = '';
+  let mod = number % 10;
+
+  if(mod === 0 || (mod > 3 && mod < 10) || (number > 10 && number < 14)) {
+    answer = `${number}th`;
+  } else if (mod === 1) {
+    answer = `${number}st`;
+  } else if (mod === 2) {
+    answer = `${number}nd`;
+  } else {
+    answer = `${number}rd`;
+  }
+  return answer;
+};
+
 function Home({ setRoadtrip, setFetchedAPI }) {
   // Variables
   // const [actualTrip, setActualTrip] = useState(1);
@@ -23,26 +40,15 @@ function Home({ setRoadtrip, setFetchedAPI }) {
   const [error, setError] = useState([0]);
 
   // Functions
-  // 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, 9th, 10th, etc.
-  const numberSyntax = (number) => {
-    let answer = '';
-    let mod = number % 10;
-
-    if(mod === 0 || (mod > 3 && mod < 10) || (number > 10 && number < 14)) {
-      answer = `${number}th`;
-    } else if (mod === 1) {
-      answer = `${number}st`;
-    } else if (mod === 2) {
-      answer = `${number}nd`;
-    } else {
-      answer = `${number}rd`;
-    }
-    return answer;
-  };
 
   // Checks if a state was selected or not
   const stateValidator = (state) => {
     return state !== 'State';
+  }
+
+  // Checks if a fuel type was selected or not
+  const fuelTypeValidator = (fuel) => {
+    return fuel !== 'Fuel Type';
   }
 
   // Checks if the fuel consumption value is reasonable
@@ -128,7 +134,7 @@ function Home({ setRoadtrip, setFetchedAPI }) {
       <div>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h2>Fuel Cost Calculator</h2>
-          {console.log(fields)}
+          {console.log(new Date())}
           {fields.map(({id}, index) => {
             return( // Here
               <div key={id}>
@@ -211,7 +217,7 @@ function Home({ setRoadtrip, setFetchedAPI }) {
           })}
           
           <div className="form-row m-2 mt-3">
-            <div className="col">
+            <div className="col-7">
             <input type="number" 
                    className="form-control" 
                    placeholder='Fuel consumption L/100KM (optional)'
@@ -221,6 +227,25 @@ function Home({ setRoadtrip, setFetchedAPI }) {
                    />
             {errors['fuelConsumption'] && <p>Come on, give me a real value (Hint: It's not even close to 50)</p>}
             </div>
+
+            <div className="col">
+              <select id="inputState"
+                      name='secondState' 
+                      className="form-control"
+                      {...register(`fuelType`, {
+                        validate: fuelTypeValidator
+                      })}>
+                <option selected>Fuel Type</option>
+                <option>Regular Gas</option>
+                <option>Medium Gas</option>
+                <option>Premium Gas</option>
+                <option>Diesel</option>
+              
+              </select>
+              {errors['fuelType'] && <p>Fuel type is required</p>}
+            </div>
+
+
           </div>
 
           <div className="form-row m-2">
