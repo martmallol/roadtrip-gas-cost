@@ -17,7 +17,8 @@ function App() {
     fuelConsumption: 0 // cambiar
   });
 
-  const [fetchedAPI, setFetchedAPI] = useState([])
+  const [fetchedAPI, setFetchedAPI] = useState([]);
+  const [EIAApi, setEIAApi] = useState([]);
 
   return (
     <div className="App">
@@ -31,9 +32,9 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
-          <Route path='/' exact element={ <Home  setRoadtrip={setRoadtrip} setFetchedAPI={setFetchedAPI}/> } />
+          <Route path='/' exact element={ <Home  setRoadtrip={setRoadtrip} setFetchedAPI={setFetchedAPI} setEIAApi={setEIAApi}/> } />
           <Route path='/state-prices' element={ <StatePrices /> } />
-          <Route path='/last-trip' element={ <LastTrip roadtrip={roadtrip} fetchedAPI={fetchedAPI}/> } />
+          <Route path='/last-trip' element={ <LastTrip roadtrip={roadtrip} fetchedAPI={fetchedAPI} EIAApi={EIAApi} /> } />
         </Routes>
       </Router>
     </div>

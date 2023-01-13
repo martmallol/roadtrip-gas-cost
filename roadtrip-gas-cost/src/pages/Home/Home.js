@@ -5,7 +5,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 // Handling errors: https://www.npmjs.com/package/@hookform/error-message
 import { ErrorMessage } from '@hookform/error-message'; 
 import statesUSA from '../../utils/states';
-import fetchMultipleTrips from '../../utils/fetchApi';
+import fetchMultipleTrips, { fetchGasPrices } from '../../utils/fetchApi';
+import { stateValidator, fuelTypeValidator, fuelValidator } from '../../utils/validators';
 
 // 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, 9th, 10th, etc.
 export const numberSyntax = (number) => {
@@ -24,7 +25,7 @@ export const numberSyntax = (number) => {
   return answer;
 };
 
-function Home({ setRoadtrip, setFetchedAPI }) {
+function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
   // Variables
   // const [actualTrip, setActualTrip] = useState(1);
   /* ...register('name') includes the key 'name' and the value inserted on that input 
@@ -40,22 +41,6 @@ function Home({ setRoadtrip, setFetchedAPI }) {
   const [error, setError] = useState([0]);
 
   // Functions
-
-  // Checks if a state was selected or not
-  const stateValidator = (state) => {
-    return state !== 'State';
-  }
-
-  // Checks if a fuel type was selected or not
-  const fuelTypeValidator = (fuel) => {
-    return fuel !== 'Fuel Type';
-  }
-
-  // Checks if the fuel consumption value is reasonable
-  const fuelValidator = (fuel) => {
-    return (fuel ? fuel >= 1 && fuel <= 8 : true );
-  }
-
   // Render Remove button if it's not the first trip
   const renderRemoveButton = (idx, length) => {
     if(idx > 0 || length > 1) {
@@ -69,7 +54,6 @@ function Home({ setRoadtrip, setFetchedAPI }) {
                         console.log(error);  
                       }}>Remove trip</button>
       </div>
-      // {() => {append({}); setError(error => [...error, 0]); console.log(error);}}
       );
     }
     return;
@@ -86,11 +70,11 @@ function Home({ setRoadtrip, setFetchedAPI }) {
     } 
   }
 
-  const nextPageHandler = (routes) => {
+  const nextPageHandler = (bingRoutes, eiaRoutes) => {
     let badRequests = 0;
-    let requestsArr = new Array(routes.length);
-    for(let i = 0; i < routes.length; i++) {
-      if(routes[i].statusCode !== 200) {
+    let requestsArr = new Array(bingRoutes.length);
+    for(let i = 0; i < bingRoutes.length; i++) {
+      if(bingRoutes[i].statusCode !== 200) {
         badRequests++;
         requestsArr[i] = 1;
       } else {
@@ -104,7 +88,8 @@ function Home({ setRoadtrip, setFetchedAPI }) {
       console.log('Provide valid addresses')
       setError(requestsArr);
     } else {
-      setFetchedAPI(routes);
+      setFetchedAPI(bingRoutes);
+      setEIAApi(eiaRoutes);
       navigation('/last-trip')
     }
   }
@@ -118,10 +103,12 @@ function Home({ setRoadtrip, setFetchedAPI }) {
     // let apiResponse = await fetchTrip(data.trips[0].firstAddress, data.trips[0].firstState, data.trips[0].secondAddress, data.trips[0].secondState);
     //console.log(apiResponse);
     console.log('Here are the API responses');
-    let apiResponse = await fetchMultipleTrips(data.trips);
-    console.log(apiResponse)
+    let bingApiResponse = await fetchMultipleTrips(data.trips);
+    let eiaApiResponse = await fetchGasPrices();
+    console.log(bingApiResponse)
+    console.log(eiaApiResponse)
 
-    nextPageHandler(apiResponse)
+    nextPageHandler(bingApiResponse, eiaApiResponse)
   };
 
   // View
@@ -131,14 +118,15 @@ function Home({ setRoadtrip, setFetchedAPI }) {
         <h1>How much money will you spend on your next US roadtrip?</h1>
         <h2>Figure it out!</h2>
       </div>
-      <div>
+      <div className='mt-4'>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h2>Fuel Cost Calculator</h2>
+          <h6>Disclaimer: Since we are in America, we will be using Gallons & Miles instead of Liters and Kilometers</h6>
           {console.log(new Date())}
           {fields.map(({id}, index) => {
             return( // Here
-              <div key={id}>
-                <label>{numberSyntax(index+1)} trip</label>                
+              <div key={id} className='mt-3'>
+                <h4>{numberSyntax(index+1)} trip</h4>                
                 <div className="form-row ml-2 mr-2">
                   <div className="col-7">
                     <input type="text" 

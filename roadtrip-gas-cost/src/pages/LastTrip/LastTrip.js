@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import './LastTrip.css'
-import { fetchGasPrices } from '../../utils/fetchApi';
 import { numberSyntax } from '../Home/Home';
 import statesUSA from '../../utils/states';
 
 
 
-function LastTrip({ roadtrip, fetchedAPI }) {
+function LastTrip({ roadtrip, fetchedAPI, EIAApi }) {
   // This page variables
   const [selected, setSelected] = useState(false);
   const [costsArray, setCostsArray] = useState(new Array(roadtrip.trips.length));
@@ -28,9 +27,9 @@ function LastTrip({ roadtrip, fetchedAPI }) {
 
   // Get trip cost by fetching EIA's API
   const getTripsCost = async () => {
+    
     // Variables
-    let apiResponse = await fetchGasPrices();
-    let gasInfo = await apiResponse.response.data;
+    let gasInfo = EIAApi.response.data;
     let fuelType = getFuelType();
     let pricesArray = new Array(roadtrip.trips.length);
     const consumption = 4 // G/100M
@@ -131,6 +130,7 @@ function LastTrip({ roadtrip, fetchedAPI }) {
         {console.log('HERE WE GO, ROADTRIP COSTS AREEEEEE: ')}
         {console.log(getTripsCost())}
         {console.log(fetchedAPI)}
+        {console.log('EIA API', EIAApi)}
         {renderCard()}
       </div>
     </div>
