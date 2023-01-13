@@ -66,7 +66,7 @@ function LastTrip({ roadtrip, fetchedAPI }) {
 
     // Calculate every trip gas cost based on state prices
     for (let i = 0; i < costsArray.length; i++) {
-      const travelDistance = fetchedAPI[0].resourceSets[0].resources[0].travelDistance;
+      const travelDistance = fetchedAPI[i].resourceSets[0].resources[0].travelDistance;
       console.log('TRAVEL DISTANCE:', travelDistance);
       const gasPrice = (pricesArray[i].firstPrice + pricesArray[i].secondPrice) / 2;
       costsArray[i] = gasPrice * travelDistance * consumption / 100;
@@ -103,14 +103,14 @@ function LastTrip({ roadtrip, fetchedAPI }) {
 
             <div className='item '>
               <div className='title p-1' onClick={() => toggle()}>
-                <h6>You'll spend approximately ${totalSpent()} on gas.</h6> 
+                <h6>You'll spend approximately ${totalSpent().toFixed(2)} on {roadtrip.fuelType}.</h6> 
                 <span>{(!selected) ? '+' : '-'}</span>
               </div>
 
               <div  className={selected ? 'content-show' : 'content'}>
                 {costsArray.map((elem, idx) => {
                   return( // Don't forget!
-                    <p>{numberSyntax(idx+1)} trip gas cost: ${costsArray[idx].toFixed(2)}</p>
+                    <p>{numberSyntax(idx+1)} trip gas cost (from {roadtrip.trips[idx].firstAddress} to {roadtrip.trips[idx].secondAddress}): ${costsArray[idx].toFixed(2)}</p>
                   )
                 })}                  
               </div>
