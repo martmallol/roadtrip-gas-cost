@@ -53,7 +53,7 @@ function Home({ setRoadtrip, setFetchedAPI }) {
 
   // Checks if the fuel consumption value is reasonable
   const fuelValidator = (fuel) => {
-    return (fuel ? fuel > 0 && fuel < 50 : true );
+    return (fuel ? fuel >= 1 && fuel <= 8 : true );
   }
 
   // Render Remove button if it's not the first trip
@@ -220,12 +220,12 @@ function Home({ setRoadtrip, setFetchedAPI }) {
             <div className="col-7">
             <input type="number" 
                    className="form-control" 
-                   placeholder='Fuel consumption L/100KM (optional)'
+                   placeholder='Fuel consumption G/100M (optional)'
                    {...register('fuelConsumption', {
                     validate: fuelValidator
                    })}
                    />
-            {errors['fuelConsumption'] && <p>Come on, give me a real value (Hint: It's not even close to 50)</p>}
+            {errors['fuelConsumption'] && <p>Come on, give me a real value (Hint: It's between 1 and 8)</p>}
             </div>
 
             <div className="col">

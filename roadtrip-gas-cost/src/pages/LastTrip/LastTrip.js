@@ -4,24 +4,15 @@ import './LastTrip.css'
 import { fetchGasPrices } from '../../utils/fetchApi';
 import { numberSyntax } from '../Home/Home';
 import statesUSA from '../../utils/states';
-const totalSpent = () => {
-  return 0;
-}
+
+
 
 function LastTrip({ roadtrip, fetchedAPI }) {
+  // This page variables
   const [selected, setSelected] = useState(false);
-  
-  const toggle = () => {
-    return (selected ? setSelected(false) : setSelected(true));
-  }
+  const [costsArray, setCostsArray] = useState(new Array(roadtrip.trips.length));
 
-  const tripsCost = [
-    {
-      id: 1,
-      answer: 'hi'
-    }
-  ]
-
+  const toggle = () => {return (selected ? setSelected(false) : setSelected(true));}
 
   const getFuelType = () => {
     if(roadtrip.fuelType === "Regular Gas") {
@@ -37,11 +28,13 @@ function LastTrip({ roadtrip, fetchedAPI }) {
 
   // Get trip cost by fetching EIA's API
   const getTripsCost = async () => {
+    // Variables
     let apiResponse = await fetchGasPrices();
     let gasInfo = await apiResponse.response.data;
     let fuelType = getFuelType();
     let pricesArray = new Array(roadtrip.trips.length);
-    
+    const consumption = 4 // G/100M
+
     // Calculate every Address' State Gas Price
     for (let i = 0; i < roadtrip.trips.length; i++) {
       let actualTrip = roadtrip.trips[i];
@@ -52,19 +45,19 @@ function LastTrip({ roadtrip, fetchedAPI }) {
         elem.abbreviation === (actualTrip.secondState).substring(actualTrip.secondState.length-2, actualTrip.secondState.length)); 
 
       let firstPriceObject = gasInfo.find((elem) => { // Search State Gas price on JSON API object
-        return('code' in firstStateObject) ? (elem.duoarea == firstStateObject.code && elem['product-name'] == fuelType) : 
-                                             (elem.duoarea == firstStateObject.petroleum && elem['product-name'] == fuelType);
+        return('code' in firstStateObject) ? (elem.duoarea === firstStateObject.code && elem['product-name'] === fuelType) : 
+                                             (elem.duoarea === firstStateObject.petroleum && elem['product-name'] === fuelType);
       });
       // Check if undefined (then search for PADD)
-      if(firstPriceObject == undefined) firstPriceObject = gasInfo.find((elem => (elem.duoarea == firstStateObject.petroleum && elem['product-name'] == fuelType)));
+      if(firstPriceObject === undefined) firstPriceObject = gasInfo.find((elem => (elem.duoarea === firstStateObject.petroleum && elem['product-name'] === fuelType)));
       console.log(firstPriceObject);
 
       let secondPriceObject = gasInfo.find((elem) => { // Search State Gas price on JSON API object
-        return ('code' in secondStateObject) ? (elem.duoarea == secondStateObject.code && elem['product-name'] == fuelType) : 
-                                               (elem.duoarea == secondStateObject.petroleum && elem['product-name'] == fuelType);
+        return ('code' in secondStateObject) ? (elem.duoarea === secondStateObject.code && elem['product-name'] === fuelType) : 
+                                               (elem.duoarea === secondStateObject.petroleum && elem['product-name'] === fuelType);
       });
       // Check undefined (then search for PADD)
-      if(secondPriceObject == undefined) secondPriceObject = gasInfo.find((elem => (elem.duoarea == secondPriceObject.petroleum && elem['product-name'] == fuelType)));
+      if(secondPriceObject === undefined) secondPriceObject = gasInfo.find((elem => (elem.duoarea === secondPriceObject.petroleum && elem['product-name'] === fuelType)));
       console.log(secondPriceObject);
       
       // Add to the prices array
@@ -72,7 +65,22 @@ function LastTrip({ roadtrip, fetchedAPI }) {
     }
 
     // Calculate every trip gas cost based on state prices
-    // TODO
+    for (let i = 0; i < costsArray.length; i++) {
+      const travelDistance = fetchedAPI[0].resourceSets[0].resources[0].travelDistance;
+      console.log('TRAVEL DISTANCE:', travelDistance);
+      const gasPrice = (pricesArray[i].firstPrice + pricesArray[i].secondPrice) / 2;
+      costsArray[i] = gasPrice * travelDistance * consumption / 100;
+      console.log('COSTS ARRAY: ', costsArray[i])
+    }
+    return;
+  }
+
+  const totalSpent = () => {
+    let result = 0;
+    for (let i = 0; i < costsArray.length; i++) {
+      result += costsArray[i];
+    }
+    return result;
   }
 
   // Render page
@@ -95,17 +103,17 @@ function LastTrip({ roadtrip, fetchedAPI }) {
 
             <div className='item '>
               <div className='title p-1' onClick={() => toggle()}>
-                <h6>You'll spend approximately ${totalSpent} on gas.</h6> 
+                <h6>You'll spend approximately ${totalSpent()} on gas.</h6> 
                 <span>{(!selected) ? '+' : '-'}</span>
               </div>
 
-                <div  className={selected ? 'content-show' : 'content'}>
-                  {tripsCost.map((elem, idx) => {
-                    return( // Don't forget!
-                      <p>{numberSyntax(idx+1)} trip gas cost: Soy el content {elem.answer}</p>
-                    )
-                  })}                  
-                </div>
+              <div  className={selected ? 'content-show' : 'content'}>
+                {costsArray.map((elem, idx) => {
+                  return( // Don't forget!
+                    <p>{numberSyntax(idx+1)} trip gas cost: ${costsArray[idx].toFixed(2)}</p>
+                  )
+                })}                  
+              </div>
             </div>
           </div>
           <div className='mt-2'>
@@ -119,11 +127,11 @@ function LastTrip({ roadtrip, fetchedAPI }) {
   return (
     <div className='m-2'>
       <div class="card" >
-        {renderCard()}
         {console.log(roadtrip)}
         {console.log('HERE WE GO, ROADTRIP COSTS AREEEEEE: ')}
         {console.log(getTripsCost())}
-
+        {console.log(fetchedAPI)}
+        {renderCard()}
       </div>
     </div>
   )
