@@ -7,23 +7,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import statesUSA from '../../utils/states';
 import fetchMultipleTrips, { fetchGasPrices } from '../../utils/fetchApi';
 import { stateValidator, fuelTypeValidator, fuelValidator } from '../../utils/validators';
-
-// 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, 9th, 10th, etc.
-export const numberSyntax = (number) => {
-  let answer = '';
-  let mod = number % 10;
-
-  if(mod === 0 || (mod > 3 && mod < 10) || (number > 10 && number < 14)) {
-    answer = `${number}th`;
-  } else if (mod === 1) {
-    answer = `${number}st`;
-  } else if (mod === 2) {
-    answer = `${number}nd`;
-  } else {
-    answer = `${number}rd`;
-  }
-  return answer;
-};
+import { numberSyntax } from '../../utils/helpers';
 
 function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
   // Variables

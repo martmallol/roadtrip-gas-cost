@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import './LastTrip.css'
-import { numberSyntax } from '../Home/Home';
 import statesUSA from '../../utils/states';
-
+import { numberSyntax, getFuelType } from '../../utils/helpers';
 
 
 function LastTrip({ roadtrip, fetchedAPI, EIAApi }) {
@@ -12,24 +11,12 @@ function LastTrip({ roadtrip, fetchedAPI, EIAApi }) {
   const [costsArray, setCostsArray] = useState(new Array(roadtrip.trips.length));
   const toggle = () => {return (selected ? setSelected(false) : setSelected(true));}
 
-  const getFuelType = () => {
-    if(roadtrip.fuelType === "Regular Gas") {
-      return "Conventional Regular Gasoline";
-    } else if (roadtrip.fuelType === "Medium Gas") {
-      return "Gasoline Conventional Midgrade";
-    } else if (roadtrip.fuelType === "Premium Gas") {
-      return "Conventional Premium Gasoline";
-    } else {
-      return "No 2 Diesel";
-    }
-  }
-
-  // Get trip cost by fetching EIA's API
+    // Get trip cost by fetching EIA's API
   const getTripsCost = async () => {
     
     // Variables
     let gasInfo = EIAApi.response.data;
-    let fuelType = getFuelType();
+    let fuelType = getFuelType(roadtrip);
     let pricesArray = new Array(roadtrip.trips.length);
     const consumption = 4 // G/100M
 
