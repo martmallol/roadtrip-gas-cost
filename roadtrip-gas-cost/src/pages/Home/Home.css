@@ -1,0 +1,7 @@
+#notloading {
+    display: none;
+}
+
+#loading {
+    display: inline;
+}

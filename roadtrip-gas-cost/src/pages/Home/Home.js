@@ -39,6 +39,7 @@ function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
   const { fields, append, remove } = useFieldArray({ control, name: "trips" })
   const navigation = useNavigate(); // Navigate to other page of my project
   const [error, setError] = useState([0]);
+  const [loading, setLoading] = useState(false);
 
   // Functions
   // Render Remove button if it's not the first trip
@@ -47,12 +48,12 @@ function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
       return (
       <div className='col-1'>
         <button type="button" 
-                      className="btn btn-primary btn-danger" 
-                      onClick={() => {
-                        remove(idx); 
-                        setError(e => [...error.slice(0,idx), ...error.slice(idx+1)]);
-                        console.log(error);  
-                      }}>Remove trip</button>
+                className="btn btn-primary btn-danger submitloading" 
+                onClick={() => {
+                  remove(idx); 
+                  setError(e => [...error.slice(0,idx), ...error.slice(idx+1)]);
+                  console.log(error);  
+                }}>Remove trip</button>
       </div>
       );
     }
@@ -64,7 +65,7 @@ function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
     if(error[idx]) {
       return(
         <div className='err'>
-          <label>This address doesn't exist! Try again with another address/state.</label>
+          <label>One of these addresses doesn't exist! Try again with another address/state.</label>
         </div>
       );
     } 
@@ -83,6 +84,10 @@ function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
     }
     console.log('Here comes the error!')
     console.log(error);
+    setLoading(false);
+    document.querySelectorAll('button.submitloading').forEach(elem => {
+      elem.disabled = false;
+    });
     // Should be an alert on the problematic trip
     if(badRequests > 0) {
       console.log('Provide valid addresses')
@@ -99,7 +104,10 @@ function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
     // console.log(data);
     //console.log(errors);
     setRoadtrip(data);
-  
+    setLoading(true);
+    document.querySelectorAll('button.submitloading').forEach(elem => {
+      elem.disabled = true;
+    });
     // let apiResponse = await fetchTrip(data.trips[0].firstAddress, data.trips[0].firstState, data.trips[0].secondAddress, data.trips[0].secondState);
     //console.log(apiResponse);
     console.log('Here are the API responses');
@@ -239,18 +247,18 @@ function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
           <div className="form-row m-2">
             <div className="col-0">
               <button type="button" 
-                      className="btn btn-primary" 
+                      className="btn btn-primary submitloading"
                       onClick={() => {append({}); setError(error => [...error, 0]); console.log(error);}}>Add a trip</button>
             </div>
             <div className="col-1">
-              <button type="submit" className="btn btn-primary">Send</button>
+              <button type="submit" className="btn btn-primary submitloading" >Send</button>
             </div>
-            
+          </div>
+
+          <div id={loading ? 'loading' : 'notloading'}>
+            <h6>Loading...</h6>
           </div>
         </form>
-      </div>
-      <div className='col-2'>
-
       </div>
     </div>
   );

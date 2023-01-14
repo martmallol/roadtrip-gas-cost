@@ -10,7 +10,6 @@ function LastTrip({ roadtrip, fetchedAPI, EIAApi }) {
   // This page variables
   const [selected, setSelected] = useState(false);
   const [costsArray, setCostsArray] = useState(new Array(roadtrip.trips.length));
-
   const toggle = () => {return (selected ? setSelected(false) : setSelected(true));}
 
   const getFuelType = () => {
