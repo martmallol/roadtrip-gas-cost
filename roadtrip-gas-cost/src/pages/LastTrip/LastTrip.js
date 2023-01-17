@@ -92,10 +92,10 @@ function LastTrip({ roadtrip, fetchedAPI, EIAApi }) {
                 <span>{(!selected) ? '+' : '-'}</span>
               </div>
 
-              <div  className={selected ? 'content-show' : 'content'}>
+              <div  className={selected ? 'content-show mt-2' : 'content mt-2'}>
                 {costsArray.map((elem, idx) => {
                   return( // Don't forget!
-                    <p>{numberSyntax(idx+1)} trip gas cost (from {roadtrip.trips[idx].firstAddress} to {roadtrip.trips[idx].secondAddress}): ${costsArray[idx].toFixed(2)}</p>
+                    <p>{numberSyntax(idx+1)} trip gas cost (<span className='addresses'>from {roadtrip.trips[idx].firstAddress} to {roadtrip.trips[idx].secondAddress}</span>):<span className='money'>${costsArray[idx].toFixed(2)}</span></p> 
                   )
                 })}                  
               </div>
