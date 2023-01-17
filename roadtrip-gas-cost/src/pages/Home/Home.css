@@ -5,3 +5,19 @@
 #loading {
     display: inline;
 }
+
+.container {
+    background-color: rgb(255, 255, 255);
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 2px solid rgb(136, 194, 255);
+}
+
+.disclaimer {
+    color: rgb(0, 123, 255);
+}
+
+.myForm {
+    padding-top: 1rem;
+    border-top: 2px solid rgb(136, 194, 255);
+}

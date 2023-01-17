@@ -1,7 +1,10 @@
 .card {
     max-width: 40rem;
     margin: 0 auto;
+    border: 2px solid rgb(136, 194, 255) !important; 
+    border-radius: 1rem !important;
 }
+
 
 .title {
     display: flex;

@@ -105,15 +105,15 @@ function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
 
   // View
   return (
-    <div className='container'>
+    <div className='container mt-4'>
       <div>
         <h1>How much money will you spend on your next US roadtrip?</h1>
         <h2>Figure it out!</h2>
       </div>
       <div className='mt-4'>
-        <form onSubmit={handleSubmit(formSubmit)}>
+        <form className='myForm' onSubmit={handleSubmit(formSubmit)}>
           <h2>Fuel Cost Calculator</h2>
-          <h6>Disclaimer: Since we are in America, we will be using Gallons & Miles instead of Liters and Kilometers</h6>
+          <h6 className='disclaimer'>Disclaimer: Since we are in America, we will be using Gallons & Miles instead of Liters and Kilometers</h6>
           {console.log(new Date())}
           {fields.map(({id}, index) => {
             return( // Here

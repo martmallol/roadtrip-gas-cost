@@ -1,4 +1,12 @@
 .App {
   text-align: center;
+  margin-top: 5rem;
 }
 
+body {
+  background: #f5f6fa;
+  overflow: scroll;
+  background: url(/src/img/background.jpg);
+  background-size:contain;
+  background-attachment: fixed;
+}

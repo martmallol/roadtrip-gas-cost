@@ -110,7 +110,7 @@ function LastTrip({ roadtrip, fetchedAPI, EIAApi }) {
   }
 
   return (
-    <div className='m-2'>
+    <div className='m-2 mt-4'>
       <div class="card" >
         {console.log(roadtrip)}
         {console.log('HERE WE GO, ROADTRIP COSTS AREEEEEE: ')}
