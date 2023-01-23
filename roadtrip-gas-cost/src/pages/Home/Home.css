@@ -21,3 +21,38 @@
     padding-top: 1rem;
     border-top: 2px solid rgb(136, 194, 255);
 }
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.banner {
+    position: relative;
+    display: inline-block;
+}
+
+.text-box {
+    position: absolute;    
+    height: 100%;
+    text-align: center;    
+    width: 100%;
+    vertical-align: middle;
+
+}
+.text-box:before {
+    content: '';
+    display: inline-block;
+    height: 80%;
+    vertical-align: bottom;
+ }
+
+.banner h1, .banner h2 {
+    display: inline-block;
+    color: #FFF;   
+}
+
+.banner h2 {
+    overflow: hidden;
+}

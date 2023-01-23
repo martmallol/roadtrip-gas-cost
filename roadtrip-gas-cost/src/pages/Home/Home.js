@@ -8,6 +8,7 @@ import statesUSA from '../../utils/states';
 import fetchMultipleTrips, { fetchGasPrices } from '../../utils/fetchApi';
 import { stateValidator, fuelTypeValidator, fuelValidator } from '../../utils/validators';
 import { numberSyntax } from '../../utils/helpers';
+import banner from '../../img/banner.jpg'
 
 function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
   // Variables
@@ -106,9 +107,12 @@ function Home({ setRoadtrip, setFetchedAPI, setEIAApi }) {
   // View
   return (
     <div className='container mt-4'>
-      <div>
-        <h1>How much money will you spend on your next US roadtrip?</h1>
-        <h2>Figure it out!</h2>
+      <div className='banner'>
+        <div class="text-box">
+          <h1>How much money will you spend on your next US roadtrip?</h1>
+          <h2>Figure it out!</h2>
+        </div>
+        <img src={banner} className="rounded mx-auto d-block" />
       </div>
       <div className='mt-4'>
         <form className='myForm' onSubmit={handleSubmit(formSubmit)}>
