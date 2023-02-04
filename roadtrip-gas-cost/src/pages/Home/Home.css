@@ -57,6 +57,10 @@ img {
     overflow: hidden;
 }
 
+p {
+    margin-bottom: 0rem;
+}
+
 @media screen and (max-width: 770px) {
     .text-box h1 {
         font-size: 1.5rem;
@@ -98,9 +102,7 @@ img {
     .myForm input, .myForm select, p {
         font-size: 0.9rem;
     }
-    p {
-        margin-bottom: 0rem;
-    }
+
     .myForm h2 {
         font-size: 1.5rem;
     }

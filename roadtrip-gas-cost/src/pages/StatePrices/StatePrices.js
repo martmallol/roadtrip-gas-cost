@@ -3,7 +3,7 @@ import './StatePrices.css'
 
 function StatePrices() {
   return (
-    <h1>State prices to be implemented...</h1>
+    <h1>State gas prices to be implemented...</h1>
   )
 }
 
