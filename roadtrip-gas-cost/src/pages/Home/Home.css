@@ -56,3 +56,125 @@ img {
 .banner h2 {
     overflow: hidden;
 }
+
+@media screen and (max-width: 770px) {
+    .text-box h1 {
+        font-size: 1.5rem;
+    }
+
+    .text-box h2 {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .text-box h1 {
+        font-size: 1rem;
+    }
+
+    .text-box h2 {
+        font-size: 0.75rem;
+    }
+
+    .myForm h2 {
+        font-size: 1.75rem;
+    }
+
+    h4 {
+        font-size: 1.25rem;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .disclaimer {
+        font-size: 0.75rem;
+    }
+    .navbar-brand span {
+        display: none;
+    }
+    .App {
+        margin-top: 3.5rem;
+    }
+    .myForm input, .myForm select, p {
+        font-size: 0.9rem;
+    }
+    p {
+        margin-bottom: 0rem;
+    }
+    .myForm h2 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .mt-4 {
+        margin-top: 0.5rem !important;
+    }
+    
+    .container {
+        padding: 0.7rem;
+    }
+
+    .container.mt-4 {
+        margin-top: 0rem !important;
+    }
+    
+    .myForm {
+        padding-top: 0.5rem;
+    }
+    .text-box h1 {
+        font-size: 0.75rem;
+    }
+
+    .text-box h2 {
+        font-size: 0.5rem;
+    }
+
+    .myForm h2 {
+        font-size: 1.25rem;
+    }
+
+    h4 {
+        font-size: 1rem;
+    }
+    .navbar-brand span {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 320px) and (max-height: 480px) {
+    .myForm input, .myForm select {
+        height: 1.75rem;
+        font-size: 0.7rem;
+    }
+    .disclaimer {
+        font-size: 0.65rem;
+        margin-bottom: 0rem;
+    }
+
+    h6, .myForm h2 {
+        margin-bottom: 0rem;
+    }
+
+    .myForm h2 {
+        font-size: 1rem;
+    }
+    
+    h4 {
+        font-size: 0.75rem;
+        margin-bottom: 0.1rem;
+    }
+
+    button {
+        height: 1.75rem; 
+        font-size: 0.8rem !important;
+        padding-top: 0.1rem !important;
+    }
+    p {
+        font-size: 0.7rem !important;
+    }
+}
