@@ -13,7 +13,7 @@ const fetchTrip = async (firstAddress, firstState, secondAddress, secondState) =
     const formatedSecondAddr = fetchBingFormat(secondAddress); 
     const formatedSecondState = fetchBingFormat(secondState);
 
-    let response = await fetch(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${formatedFirstAddr},%20${formatedFirstState}&wayPoint.2=${formatedSecondAddr},%20${formatedSecondState}&distanceUnit=mi&key=${bingAPIKey}`);
+    let response = await fetch(`/.netlify/functions/fetchBing?formatedFirstAddr=${formatedFirstAddr}&formatedFirstState=${formatedFirstState}&formatedSecondAddr=${formatedSecondAddr}&formatedSecondState=${formatedSecondState}`);
     // Error fetching (Prevents me to keep executing the form's submission code and its error handling)
     /* if (response.status !== 200) {
         throw new Error("Cannot fetch data, wrong addresses!");
@@ -53,7 +53,7 @@ const getLastTenDaysDate = () => { // https://bobbyhadz.com/blog/javascript-get-
 export const fetchGasPrices = async () => {
     const startDate = getLastTenDaysDate();
     console.log(startDate);
-    let response = await fetch(`https://api.eia.gov/v2/petroleum/pri/gnd/data/?frequency=weekly&data[0]=value&facets[duoarea][]=R1X&facets[duoarea][]=R1Y&facets[duoarea][]=R1Z&facets[duoarea][]=R20&facets[duoarea][]=R30&facets[duoarea][]=R40&facets[duoarea][]=R50&facets[duoarea][]=SCA&facets[duoarea][]=SCO&facets[duoarea][]=SFL&facets[duoarea][]=SFL&facets[duoarea][]=SMA&facets[duoarea][]=SMN&facets[duoarea][]=SNY&facets[duoarea][]=SOH&facets[duoarea][]=STX&facets[product][]=EPD2D&facets[product][]=EPMMU&facets[product][]=EPMPU&facets[product][]=EPMRU&start=${startDate}&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&api_key=${EIAAPIKey}`);
+    let response = await fetch(`/.netlify/functions/fetchEIA?startDate=${startDate}`);
     if (response.ok) {
         let data = await response.json();
         console.log(data);
